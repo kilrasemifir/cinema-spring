@@ -19,7 +19,7 @@ __Objectif__ : Créer une API qui permet de gérer les films, les séances, les 
 
 #### Fonctionnalités avancées:
 
-- Associer des `acteurs` et des `réalisateurs` à des `films`
+- Associer des `acteurs` et des `réalisateurs` à des `films` 
 - Réserver des `tickets` pour une séance donnée
 - Afficher la liste des `films` disponibles à une date donnée
 - Afficher la liste des `salles` disponibles à une date et à une heure données
