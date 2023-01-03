@@ -40,4 +40,9 @@ public class FilmController {
     public Film update(@RequestBody Film film){
         return this.service.save(film);
     }
+
+    @GetMapping("titre/{titre}")
+    public List<Film> findByTitre(@PathVariable String titre){
+        return this.service.findByTitreContaining(titre);
+    }
 }

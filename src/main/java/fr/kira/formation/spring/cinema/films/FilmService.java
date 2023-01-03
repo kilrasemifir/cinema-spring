@@ -61,4 +61,13 @@ public class FilmService {
     public void deleteById(Integer id) {
         jpaRepository.deleteById(id);
     }
+
+    /**
+     * Retourne la liste des films ou leurs titre contient le mot clef.
+     * @param titre a rechercher
+     * @return liste des films
+     */
+    public List<Film> findByTitreContaining(String titre){
+        return jpaRepository.findByTitreContaining(titre);
+    }
 }
