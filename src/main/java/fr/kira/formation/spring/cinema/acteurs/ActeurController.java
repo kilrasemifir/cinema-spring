@@ -1,7 +1,11 @@
 package fr.kira.formation.spring.cinema.acteurs;
 
+import fr.kira.formation.spring.cinema.acteurs.dto.ActeurCompletDto;
+import fr.kira.formation.spring.cinema.acteurs.dto.ActeurSansFilmDto;
 import lombok.Getter;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/acteurs")
@@ -15,17 +19,17 @@ public class ActeurController {
     }
 
     @GetMapping
-    public Iterable<Acteur> findAll() {
+    public List<ActeurSansFilmDto> findAll() {
         return service.findAll();
     }
 
     @GetMapping("{id}")
-    public Acteur findById(@PathVariable Integer id) {
+    public ActeurCompletDto findById(@PathVariable Integer id) {
         return service.findById(id);
     }
 
     @PostMapping
-    public Acteur save(@RequestBody Acteur entity) {
+    public ActeurCompletDto save(@RequestBody Acteur entity) {
         return service.save(entity);
     }
 

@@ -40,6 +40,30 @@ Dans un terminal, exécuter la commande suivante:
 docker-compose up -d
 ```
 
+### Lancer le code pour le développement
+
+Dans un IDE comme IntelliJ IDEA, ouvrir le projet et lancer la classe `CinemaApplication`.
+
+### Lancer le code pour la production
+
+Dans un terminal, exécuter la commande suivante:
+
+```bash
+# Pour Linux
+mvn clean package
+
+# Pour Windows
+mvnw.cmd clean package
+```
+
+Vous trouverez le fichier `cinema-0.0.1-SNAPSHOT.jar` dans le dossier `target`.
+
+Pour lancer le fichier `.jar`, exécuter la commande suivante:
+
+```bash
+java -jar target/cinema-0.0.1-SNAPSHOT.jar
+```
+
 ## Utilisation
 
 TODO

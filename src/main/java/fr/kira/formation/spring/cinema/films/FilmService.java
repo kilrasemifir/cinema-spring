@@ -29,7 +29,7 @@ public class FilmService {
 
     /**
      * Sauvegarde un film dans la base de données.
-     * Si le film e posséde aucun id, alors sauvegarde le film et lui donne un id.
+     * Si le film posséde aucun id, alors sauvegarde le film et lui donne un id.
      * Sinon remplace le film portant l'id dans la base de données.
      * @param film a sauvegarder
      * @return film sauvegarder.
