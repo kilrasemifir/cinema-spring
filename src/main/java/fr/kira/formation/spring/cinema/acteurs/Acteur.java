@@ -2,7 +2,6 @@ package fr.kira.formation.spring.cinema.acteurs;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import fr.kira.formation.spring.cinema.films.Film;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -16,12 +15,12 @@ import java.util.List;
 @Table(name = "acteurs")
 @Getter
 @Setter
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@JsonIdentityInfo(generator = com.fasterxml.jackson.annotation.ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Acteur {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
 
     private String nom;
 
@@ -33,7 +32,7 @@ public class Acteur {
         id_film
         id_acteur
      */
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "acteur_film", // nom de la table de jointure
             joinColumns = @JoinColumn(name="id_acteur"), // nom de la colonne pour les acteurs

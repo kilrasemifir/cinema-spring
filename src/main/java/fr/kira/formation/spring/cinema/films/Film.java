@@ -10,7 +10,7 @@ import fr.kira.formation.spring.cinema.acteurs.Acteur;
 import fr.kira.formation.spring.cinema.realisateurs.Realisateur;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.Hibernate;
+import org.hibernate.annotations.Cascade;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -49,10 +49,11 @@ public class Film {
 
     // Attention!! ManyToMany bidirectionnel ne peut pas être serialisé en JSON
     //@JsonManagedReference // Permet de ne pas avoir de boucle infinie lors de la sérialisation en JSON
-    @ManyToMany(mappedBy = "films") // fais référence à l'attribut films de la classe Acteur
+    @ManyToMany(mappedBy = "films", cascade = {CascadeType.ALL, CascadeType.PERSIST}) // fais référence à l'attribut films de la classe Acteur
     private List<Acteur> acteurs = new ArrayList<>();
 
     @ManyToMany(mappedBy = "films")
+    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
     private List<Realisateur> realisateurs = new ArrayList<>();
 
 }

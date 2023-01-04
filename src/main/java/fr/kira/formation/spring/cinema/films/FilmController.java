@@ -1,5 +1,6 @@
 package fr.kira.formation.spring.cinema.films;
 
+import fr.kira.formation.spring.cinema.acteurs.Acteur;
 import fr.kira.formation.spring.cinema.films.dto.FilmCompletDto;
 import fr.kira.formation.spring.cinema.films.dto.FilmReduitDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +49,25 @@ public class FilmController {
     @GetMapping("titre/{titre}")
     public List<FilmReduitDto> findByTitre(@PathVariable String titre){
         return this.service.findByTitreContaining(titre);
+    }
+
+    /**
+     * Ajoute un acteur a un film en utilisant l'id de l'acteur et l'id du film.
+     * @param id du film
+     * @param idActeur id de l'acteur
+     */
+    @PostMapping("{id}/acteurs/{idActeur}")
+    public void addActeur(@PathVariable Integer id, @PathVariable Integer idActeur){
+        this.service.addActeurById(id, idActeur);
+    }
+    // Ou
+    /**
+     * Ajoute un acteur a un film en utilisant l'acteur et l'id du film
+     * @param id du film ou ajouter l'acteur
+     * @param acteur a ajouter
+     */
+    @PostMapping("{id}/acteurs")
+    public void addActeur(@PathVariable Integer id, @RequestBody Acteur acteur){
+        this.service.addActeur(id, acteur);
     }
 }

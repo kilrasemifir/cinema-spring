@@ -37,4 +37,8 @@ public class ActeurService {
         return entities.stream().map(acteur -> mapper.convertValue(acteur, ActeurSansFilmDto.class)).toList();
     }
 
+    public Acteur findOrInsert(Acteur acteur){
+        return this.repository.findById(acteur.getId()).orElse(this.repository.save(acteur));
+    }
+
 }

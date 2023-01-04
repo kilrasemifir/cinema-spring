@@ -1,6 +1,8 @@
 package fr.kira.formation.spring.cinema.films;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.kira.formation.spring.cinema.acteurs.Acteur;
+import fr.kira.formation.spring.cinema.acteurs.ActeurService;
 import fr.kira.formation.spring.cinema.films.dto.FilmCompletDto;
 import fr.kira.formation.spring.cinema.films.dto.FilmReduitDto;
 import org.springframework.http.HttpStatus;
@@ -15,15 +17,15 @@ import java.util.List;
 @Service
 public class FilmService {
 
-    private final FullFilmRepository repository;
     private final FilmJpaRepository jpaRepository;
+    private final ActeurService acteurService;
 
     private final ObjectMapper mapper;
 
 
-    public FilmService(FullFilmRepository repository, FilmJpaRepository jpaRepository, ObjectMapper mapper) {
-        this.repository = repository;
+    public FilmService(FilmJpaRepository jpaRepository, ActeurService acteurService, ObjectMapper mapper) {
         this.jpaRepository = jpaRepository;
+        this.acteurService = acteurService;
         this.mapper = mapper;
     }
 
@@ -81,5 +83,28 @@ public class FilmService {
     public List<FilmReduitDto> findByTitreContaining(String titre){
         List<Film> entities = jpaRepository.findByTitreContaining(titre);
         return entities.stream().map(film -> mapper.convertValue(film, FilmReduitDto.class)).toList();
+    }
+
+    /**
+     * Ajoute un acteur a un film en fonction de l'id du film et l'id de l'acteur
+     * @param id du film
+     * @param idActeur id de l'acteur
+     */
+    public void addActeurById(Integer id, Integer idActeur) {
+        Acteur acteur = new Acteur();
+        acteur.setId(idActeur);
+        addActeur(id, acteur);
+    }
+
+    /**
+     * Ajoute un acteur au film en fonction de l'id du film et de l'acteur.
+     * @param id du film
+     * @param acteur a ajouter
+     */
+    public void addActeur(Integer id, Acteur acteur) {
+        Film film = jpaRepository.findById(id).orElseThrow();
+        Acteur acteurAAjouter = this.acteurService.findOrInsert(acteur);
+        film.getActeurs().add(acteurAAjouter);
+        jpaRepository.save(film);
     }
 }
