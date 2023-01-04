@@ -13,11 +13,11 @@ import java.util.List;
  * Cette classe utilise EntityManager d'hibernate
  */
 @Repository
-public class FilmRepository {
+public class FullFilmRepository {
 
     private final EntityManager entityManager;
 
-    public FilmRepository(EntityManager entityManager) {
+    public FullFilmRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 

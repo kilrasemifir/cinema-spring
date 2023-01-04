@@ -1,12 +1,13 @@
 package fr.kira.formation.spring.cinema.films;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.kira.formation.spring.cinema.films.dto.FilmCompletDto;
+import fr.kira.formation.spring.cinema.films.dto.FilmReduitDto;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Classe Service pour les films.
@@ -14,14 +15,16 @@ import java.util.Optional;
 @Service
 public class FilmService {
 
-    private final FilmRepository repository;
+    private final FullFilmRepository repository;
     private final FilmJpaRepository jpaRepository;
 
+    private final ObjectMapper mapper;
 
-    public FilmService(FilmRepository repository, FilmJpaRepository jpaRepository) {
+
+    public FilmService(FullFilmRepository repository, FilmJpaRepository jpaRepository, ObjectMapper mapper) {
         this.repository = repository;
         this.jpaRepository = jpaRepository;
-
+        this.mapper = mapper;
     }
 
     /**
@@ -31,16 +34,23 @@ public class FilmService {
      * @param film a sauvegarder
      * @return film sauvegarder.
      */
-    public Film save(Film film){
-        return this.jpaRepository.save(film);
+    public FilmCompletDto save(Film film){
+        Film entite = jpaRepository.save(film);
+        return mapper.convertValue(entite, FilmCompletDto.class);
     }
 
     /**
      * Retourne la liste de l'ensemble des films.
      * @return liste de l'ensemble des films.
      */
-    public List<Film> findAll(){
-        return this.jpaRepository.findAll();
+    public List<FilmReduitDto> findAll(){
+        List<Film> entities = this.jpaRepository.findAll();
+        /*
+        En JS
+        let entities = ...
+        return entities.map(entity => mapper.convertValue(entity, FilmReduitDto.class))
+         */
+        return entities.stream().map(film -> mapper.convertValue(film, FilmReduitDto.class)).toList();
     }
 
     /**
@@ -50,8 +60,9 @@ public class FilmService {
      * @throws ResponseStatusException si aucun ne porte cet id dans la base de données,
      *      alors retourne cette exception avec le status 404 NOT_FOUND
      */
-    public Film findById(Integer id) {
-        return jpaRepository.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public FilmCompletDto findById(Integer id) {
+        var entity =  jpaRepository.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return mapper.convertValue(entity, FilmCompletDto.class);
     }
 
     /**
@@ -67,7 +78,8 @@ public class FilmService {
      * @param titre a rechercher
      * @return liste des films
      */
-    public List<Film> findByTitreContaining(String titre){
-        return jpaRepository.findByTitreContaining(titre);
+    public List<FilmReduitDto> findByTitreContaining(String titre){
+        List<Film> entities = jpaRepository.findByTitreContaining(titre);
+        return entities.stream().map(film -> mapper.convertValue(film, FilmReduitDto.class)).toList();
     }
 }

@@ -1,12 +1,15 @@
 package fr.kira.formation.spring.cinema.films;
 
+import fr.kira.formation.spring.cinema.films.dto.FilmCompletDto;
+import fr.kira.formation.spring.cinema.films.dto.FilmReduitDto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("films")
-@CrossOrigin // evite les problème les CORS
+@CrossOrigin // evite les problèmes les CORS
 public class FilmController {
 
     private final FilmService service;
@@ -17,17 +20,18 @@ public class FilmController {
     }
 
     @PostMapping
-    public Film save(@RequestBody Film film) {
+    public FilmCompletDto save(@RequestBody Film film) {
         return service.save(film);
     }
 
     @GetMapping
-    public List<Film> findAll() {
-        return service.findAll();
+    public List<FilmReduitDto> findAll() {
+        var res =  service.findAll();
+        return res;
     }
 
     @GetMapping("{id}")
-    public Film findById(@PathVariable Integer id) {
+    public FilmCompletDto findById(@PathVariable Integer id) {
         return service.findById(id);
     }
 
@@ -37,12 +41,12 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film update(@RequestBody Film film){
+    public FilmCompletDto update(@RequestBody Film film){
         return this.service.save(film);
     }
 
     @GetMapping("titre/{titre}")
-    public List<Film> findByTitre(@PathVariable String titre){
+    public List<FilmReduitDto> findByTitre(@PathVariable String titre){
         return this.service.findByTitreContaining(titre);
     }
 }

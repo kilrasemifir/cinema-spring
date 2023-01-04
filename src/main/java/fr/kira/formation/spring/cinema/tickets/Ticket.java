@@ -25,5 +25,4 @@ public class Ticket {
     @JoinColumn(name = "seance_id")
     private Seance seance;
 
-
 }

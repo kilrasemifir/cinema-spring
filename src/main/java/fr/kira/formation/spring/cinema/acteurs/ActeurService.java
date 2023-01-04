@@ -1,21 +1,21 @@
-package fr.kira.formation.spring.cinema.tickets;
+package fr.kira.formation.spring.cinema.acteurs;
 
 import org.springframework.stereotype.Service;
 
 @Service
-public class TicketService {
+public class ActeurService {
 
-    private final TicketRepository repository;
+    private final ActeurRepository repository;
 
-    public TicketService(TicketRepository repository) {
+    public ActeurService(ActeurRepository repository) {
         this.repository = repository;
     }
 
-    public Ticket save(Ticket entity) {
+    public Acteur save(Acteur entity) {
         return repository.save(entity);
     }
 
-    public Ticket findById(Integer integer) {
+    public Acteur findById(Integer integer) {
         return repository.findById(integer).orElseThrow();
     }
 
@@ -23,10 +23,8 @@ public class TicketService {
         repository.deleteById(integer);
     }
 
-    public Iterable<Ticket> findAll() {
+    public Iterable<Acteur> findAll() {
         return repository.findAll();
     }
-
-
 
 }

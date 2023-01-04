@@ -3,11 +3,17 @@ package fr.kira.formation.spring.cinema.films;
 // jakarta == JEE
 // jakarta.persistence == JPA
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import fr.kira.formation.spring.cinema.acteurs.Acteur;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -21,8 +27,8 @@ import java.util.Objects;
 @Table(name="films") // perme de definir dans quel table se trouve cette entité
 @Getter // Ajoute un getter pour chaque attribut
 @Setter // Ajoute un setter pour chaque attribut
-@ToString // Ajoute le toString
 @NoArgsConstructor // Ajoute un constructeur sans params
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Film {
 
     @Id // Define que le champ représente la clé primaire de la table
@@ -33,14 +39,16 @@ public class Film {
     private String titre;
 
     @Column(name="date_sortie")
-    private LocalDate date_sortie;
+    private LocalDate dateSortie;
 
     private int duree;
 
     @Column(length = 500)
     private String resume;
 
-    @Transient // Ignoré par la base de données
-    private String attributSansLienBdd;
+    // Attention!! ManyToMany bidirectionnel ne peut pas être serialisé en JSON
+    //@JsonManagedReference // Permet de ne pas avoir de boucle infinie lors de la sérialisation en JSON
+    @ManyToMany(mappedBy = "films") // fais référence à l'attribut films de la classe Acteur
+    private List<Acteur> acteurs = new ArrayList<>();
 
 }
