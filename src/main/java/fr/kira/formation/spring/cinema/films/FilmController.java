@@ -1,9 +1,9 @@
 package fr.kira.formation.spring.cinema.films;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.kira.formation.spring.cinema.acteurs.Acteur;
 import fr.kira.formation.spring.cinema.films.dto.FilmCompletDto;
 import fr.kira.formation.spring.cinema.films.dto.FilmReduitDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,10 +14,12 @@ import java.util.List;
 public class FilmController {
 
     private final FilmService service;
+    private final ObjectMapper mapper;
 
 
-    public FilmController(FilmService service) {
+    public FilmController(FilmService service, ObjectMapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     /**
@@ -38,7 +40,8 @@ public class FilmController {
      */
     @PostMapping
     public FilmCompletDto save(@RequestBody Film film) {
-        return service.save(film);
+        Film entity = service.save(film);
+        return mapper.convertValue(entity, FilmCompletDto.class);
     }
 
     /**
@@ -48,8 +51,10 @@ public class FilmController {
      */
     @GetMapping
     public List<FilmReduitDto> findAll() {
-        var res =  service.findAll();
-        return res;
+        return service.findAll()
+                .stream()
+                    .map(film -> mapper.convertValue(film, FilmReduitDto.class))
+                .toList();
     }
 
     /**
@@ -60,7 +65,8 @@ public class FilmController {
      */
     @GetMapping("{id}")
     public FilmCompletDto findById(@PathVariable Integer id) {
-        return service.findById(id);
+        Film entity = service.findById(id);
+        return mapper.convertValue(entity, FilmCompletDto.class);
     }
 
     /**
@@ -88,12 +94,13 @@ public class FilmController {
      */
     @PutMapping
     public FilmCompletDto update(@RequestBody Film film){
-        return this.service.save(film);
+        return this.save(film);
     }
 
     @GetMapping("titre/{titre}")
     public List<FilmReduitDto> findByTitre(@PathVariable String titre){
-        return this.service.findByTitreContaining(titre);
+        List<Film> entities = this.service.findByTitreContaining(titre);
+        return entities.stream().map(film -> mapper.convertValue(film, FilmReduitDto.class)).toList();
     }
 
     /**
