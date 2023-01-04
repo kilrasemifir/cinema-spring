@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import fr.kira.formation.spring.cinema.acteurs.Acteur;
+import fr.kira.formation.spring.cinema.realisateurs.Realisateur;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
@@ -50,5 +51,8 @@ public class Film {
     //@JsonManagedReference // Permet de ne pas avoir de boucle infinie lors de la sérialisation en JSON
     @ManyToMany(mappedBy = "films") // fais référence à l'attribut films de la classe Acteur
     private List<Acteur> acteurs = new ArrayList<>();
+
+    @ManyToMany(mappedBy = "films")
+    private List<Realisateur> realisateurs = new ArrayList<>();
 
 }

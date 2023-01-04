@@ -1,6 +1,8 @@
 package fr.kira.formation.spring.cinema.films.dto;
 
 import fr.kira.formation.spring.cinema.acteurs.dto.ActeurSansFilmDto;
+import fr.kira.formation.spring.cinema.realisateurs.Realisateur;
+import fr.kira.formation.spring.cinema.realisateurs.dto.RealisateurSansFilmDto;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -15,4 +17,5 @@ public class FilmCompletDto {
     private int duree;
     private LocalDate dateSortie;
     private List<ActeurSansFilmDto> acteurs = new ArrayList<>();
+    private List<RealisateurSansFilmDto> realisateurs = new ArrayList<>();
 }
