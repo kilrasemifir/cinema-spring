@@ -38,5 +38,4 @@ public class ActeurController {
         service.deleteById(id);
     }
 
-
 }

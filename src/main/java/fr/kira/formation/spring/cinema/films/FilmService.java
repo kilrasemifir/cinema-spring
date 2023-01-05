@@ -1,16 +1,15 @@
 package fr.kira.formation.spring.cinema.films;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.kira.formation.spring.cinema.acteurs.Acteur;
 import fr.kira.formation.spring.cinema.acteurs.ActeurService;
 import fr.kira.formation.spring.cinema.exceptions.NotFoundException;
-import fr.kira.formation.spring.cinema.films.dto.FilmCompletDto;
-import fr.kira.formation.spring.cinema.films.dto.FilmReduitDto;
 import fr.kira.formation.spring.cinema.realisateurs.Realisateur;
-import org.springframework.http.HttpStatus;
+import fr.kira.formation.spring.cinema.seances.Seance;
+import fr.kira.formation.spring.cinema.seances.SeanceService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -36,13 +35,21 @@ public class FilmService {
     private final ActeurService acteurService;
 
     /**
+     * Le service pour les séances. <br>
+     */
+    private final SeanceService seanceService;
+
+    /**
      * Constructeur du service pour les films.
+     *
      * @param jpaRepository le repository pour les films.
      * @param acteurService le service pour les acteurs.
+     * @param seanceService le service pour les séances.
      */
-    public FilmService(FilmJpaRepository jpaRepository, ActeurService acteurService) {
+    public FilmService(FilmJpaRepository jpaRepository, ActeurService acteurService, SeanceService seanceService) {
         this.jpaRepository = jpaRepository;
         this.acteurService = acteurService;
+        this.seanceService = seanceService;
     }
 
     /**
@@ -156,5 +163,15 @@ public class FilmService {
         Film film = jpaRepository.findById(id).orElseThrow();
         film.getRealisateurs().add(realisateur);
         jpaRepository.save(film);
+    }
+
+    /**
+     * Retourne la liste des {@link Film} possédant une seance a une date donnée.
+     * @param date date a rechercher
+     * @return liste des {@link Film} possédant une seance a une date donnée.
+     */
+    public List<Film> findBySeanceDate(LocalDate date) {
+        List<Seance> seances = seanceService.findByDate(date);
+        return seances.stream().map(Seance::getFilm).toList();
     }
 }

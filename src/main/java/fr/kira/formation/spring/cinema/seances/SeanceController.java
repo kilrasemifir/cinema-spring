@@ -1,5 +1,6 @@
 package fr.kira.formation.spring.cinema.seances;
 
+import fr.kira.formation.spring.cinema.exceptions.BadRequestException;
 import lombok.Getter;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,8 +27,10 @@ public class SeanceController {
     }
 
     @PostMapping
-    public Seance save(@RequestBody Seance seance) {
-        return service.save(seance);
+    public Seance save(@RequestBody Seance entity) {
+        if (entity.getSalle() == null)  throw new SeanceBadRequestException("Il faut une salle");
+        if (entity.getFilm() == null)  throw new SeanceBadRequestException("Il faut un film");
+        return service.save(entity);
     }
 
     @DeleteMapping("{id}")

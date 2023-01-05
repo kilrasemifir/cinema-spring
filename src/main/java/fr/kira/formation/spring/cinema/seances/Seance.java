@@ -16,7 +16,7 @@ public class Seance {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
-    private Long id;
+    private Integer id;
 
     private LocalDate date;
 
@@ -32,11 +32,11 @@ public class Seance {
      * @JoinColumn(name = "film_id") Specifie le nom de la colonne qui va contenir la clé étrangère
      */
     @ManyToOne
-    @JoinColumn(name = "film_id")
+    @JoinColumn(name = "film_id", nullable = false)
     private Film film;
 
 
     @ManyToOne
-    @JoinColumn(name = "salle_id")
+    @JoinColumn(name = "salle_id", nullable = false)
     private Salle salle;
 }

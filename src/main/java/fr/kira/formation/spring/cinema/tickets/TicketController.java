@@ -15,6 +15,7 @@ public class TicketController {
 
         @PostMapping
         public Ticket save(@RequestBody Ticket entity) {
+            if (entity.getSeance() == null)  throw new TicketBadRequestException("Il faut une séance");
             return service.save(entity);
         }
 
