@@ -33,12 +33,8 @@ public class Acteur {
         id_film
         id_acteur
      */
-    @ManyToMany()
-    @JoinTable(
-            name = "acteur_film", // nom de la table de jointure
-            joinColumns = @JoinColumn(name="id_acteur"), // nom de la colonne pour les acteurs
-            inverseJoinColumns = @JoinColumn(name = "id_film")
-    )
+    @ManyToMany(mappedBy = "acteurs")
+
     //@JsonBackReference // pour eviter la boucle infinie
     private List<Film> films = new ArrayList<>();
 }

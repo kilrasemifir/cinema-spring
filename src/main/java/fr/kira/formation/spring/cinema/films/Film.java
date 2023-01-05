@@ -50,10 +50,20 @@ public class Film {
 
     // Attention!! ManyToMany bidirectionnel ne peut pas être serialisé en JSON
     //@JsonManagedReference // Permet de ne pas avoir de boucle infinie lors de la sérialisation en JSON
-    @ManyToMany(mappedBy = "films") // fais référence à l'attribut films de la classe Acteur
+    @ManyToMany() // fais référence à l'attribut films de la classe Acteur
+    @JoinTable(
+            name = "acteur_film", // nom de la table de jointure
+            joinColumns = @JoinColumn(name = "id_film"), // nom de la colonne de la table courante
+            inverseJoinColumns = @JoinColumn(name="id_acteur") // nom de la colonne pour les acteurs
+    )
     private List<Acteur> acteurs = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "films")
+    @ManyToMany()
+    @JoinTable(
+            name = "realisateur_film",
+            inverseJoinColumns = @JoinColumn(name = "id_realisateur"),
+            joinColumns = @JoinColumn(name = "id_film")
+    )
     private List<Realisateur> realisateurs = new ArrayList<>();
 
 }

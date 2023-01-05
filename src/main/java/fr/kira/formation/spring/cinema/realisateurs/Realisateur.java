@@ -26,11 +26,6 @@ public class Realisateur {
 
     private String prenom;
 
-    @ManyToMany
-    @JoinTable(
-            name = "realisateur_film",
-            joinColumns = @JoinColumn(name = "id_realisateur"),
-            inverseJoinColumns = @JoinColumn(name = "id_film")
-    )
+    @ManyToMany(mappedBy = "realisateurs")
     private List<Film> films = new ArrayList<>();
 }
