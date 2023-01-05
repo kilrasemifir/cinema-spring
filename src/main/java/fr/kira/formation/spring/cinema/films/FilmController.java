@@ -2,11 +2,18 @@ package fr.kira.formation.spring.cinema.films;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.kira.formation.spring.cinema.acteurs.Acteur;
+import fr.kira.formation.spring.cinema.exceptions.BadRequestException;
 import fr.kira.formation.spring.cinema.films.dto.FilmCompletDto;
 import fr.kira.formation.spring.cinema.films.dto.FilmReduitDto;
+import org.hibernate.PropertyValueException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("films")
@@ -15,6 +22,8 @@ public class FilmController {
 
     private final FilmService service;
     private final ObjectMapper mapper;
+
+    private final Logger logger = LoggerFactory.getLogger(FilmController.class);
 
 
     public FilmController(FilmService service, ObjectMapper mapper) {
@@ -39,9 +48,19 @@ public class FilmController {
      * @return film sauvegarder.
      */
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public FilmCompletDto save(@RequestBody Film film) {
-        Film entity = service.save(film);
-        return mapper.convertValue(entity, FilmCompletDto.class);
+        try {
+            Film entity = service.save(film);
+            return mapper.convertValue(entity, FilmCompletDto.class);
+        } catch (PropertyValueException | DataIntegrityViolationException e) {
+            logger.warn("Le film doit posséder un titre et une date de sortie. "+film);
+            throw new BadRequestException("Le film doit posséder un titre et une date de sortie.");
+        } catch (Exception e) {
+            System.out.println(e.getClass().getSimpleName());
+            throw new RuntimeException("Le film n'a pas pu être sauvegardé.", e);
+        }
+
     }
 
     /**
@@ -75,6 +94,7 @@ public class FilmController {
      * @param id l'id du film à supprimer.
      */
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable Integer id) {
         service.deleteById(id);
     }
@@ -93,6 +113,7 @@ public class FilmController {
      * @return film sauvegarder.
      */
     @PutMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public FilmCompletDto update(@RequestBody Film film){
         return this.save(film);
     }
@@ -144,6 +165,7 @@ public class FilmController {
      * @param acteur a ajouter
      */
     @PostMapping("{id}/acteurs")
+
     public void addActeur(@PathVariable Integer id, @RequestBody Acteur acteur){
         this.service.addActeur(id, acteur);
     }

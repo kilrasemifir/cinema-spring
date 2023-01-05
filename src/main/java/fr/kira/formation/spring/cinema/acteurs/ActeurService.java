@@ -38,7 +38,7 @@ public class ActeurService {
     }
 
     public Acteur findOrInsert(Acteur acteur){
-        return this.repository.findById(acteur.getId()).orElse(this.repository.save(acteur));
+        return this.repository.findById(acteur.getId()).orElseGet(()->this.repository.save(acteur));
     }
 
 }

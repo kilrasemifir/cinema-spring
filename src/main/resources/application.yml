@@ -10,3 +10,13 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+server:
+  error:
+    include-stacktrace: never
+
+logging:
+  level:
+    root: WARN
+  file:
+    name: app.log

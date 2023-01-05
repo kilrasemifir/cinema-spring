@@ -3,6 +3,7 @@ package fr.kira.formation.spring.cinema.films;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.kira.formation.spring.cinema.acteurs.Acteur;
 import fr.kira.formation.spring.cinema.acteurs.ActeurService;
+import fr.kira.formation.spring.cinema.exceptions.NotFoundException;
 import fr.kira.formation.spring.cinema.films.dto.FilmCompletDto;
 import fr.kira.formation.spring.cinema.films.dto.FilmReduitDto;
 import fr.kira.formation.spring.cinema.realisateurs.Realisateur;
@@ -35,22 +36,13 @@ public class FilmService {
     private final ActeurService acteurService;
 
     /**
-     * Le mapper permettant de convertir les entités en DTOs et vice-versa. <br>
-     * Attention son utilisation dans le service peut être dangereuse.
-     */
-    private final ObjectMapper mapper;
-
-
-    /**
      * Constructeur du service pour les films.
      * @param jpaRepository le repository pour les films.
      * @param acteurService le service pour les acteurs.
-     * @param mapper le mapper pour les films.
      */
-    public FilmService(FilmJpaRepository jpaRepository, ActeurService acteurService, ObjectMapper mapper) {
+    public FilmService(FilmJpaRepository jpaRepository, ActeurService acteurService) {
         this.jpaRepository = jpaRepository;
         this.acteurService = acteurService;
-        this.mapper = mapper;
     }
 
     /**
@@ -86,7 +78,7 @@ public class FilmService {
      *      alors retourne cette exception avec le status 404 NOT_FOUND
      */
     public Film findById(Integer id) {
-        return jpaRepository.findById(id).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return jpaRepository.findById(id).orElseThrow(()->new NotFoundException("Aucun film ne porte l'id "+id));
     }
 
     /**
@@ -125,6 +117,8 @@ public class FilmService {
     public void addActeur(Integer id, Acteur acteur) {
         Film film = jpaRepository.findById(id).orElseThrow();
         Acteur acteurAAjouter = this.acteurService.findOrInsert(acteur);
+        System.out.println("Acteur a ajouter : " + acteurAAjouter.getId());
+        System.out.println("Film" + film.getId());
         film.getActeurs().add(acteurAAjouter);
         jpaRepository.save(film);
     }

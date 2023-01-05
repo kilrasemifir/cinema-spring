@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class Acteur {
         id_film
         id_acteur
      */
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany()
     @JoinTable(
             name = "acteur_film", // nom de la table de jointure
             joinColumns = @JoinColumn(name="id_acteur"), // nom de la colonne pour les acteurs

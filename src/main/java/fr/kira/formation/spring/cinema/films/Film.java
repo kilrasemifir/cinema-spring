@@ -29,6 +29,7 @@ import java.util.Objects;
 @Getter // Ajoute un getter pour chaque attribut
 @Setter // Ajoute un setter pour chaque attribut
 @NoArgsConstructor // Ajoute un constructeur sans params
+@ToString
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Film {
 
@@ -49,11 +50,10 @@ public class Film {
 
     // Attention!! ManyToMany bidirectionnel ne peut pas être serialisé en JSON
     //@JsonManagedReference // Permet de ne pas avoir de boucle infinie lors de la sérialisation en JSON
-    @ManyToMany(mappedBy = "films", cascade = {CascadeType.ALL, CascadeType.PERSIST}) // fais référence à l'attribut films de la classe Acteur
+    @ManyToMany(mappedBy = "films") // fais référence à l'attribut films de la classe Acteur
     private List<Acteur> acteurs = new ArrayList<>();
 
     @ManyToMany(mappedBy = "films")
-    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
     private List<Realisateur> realisateurs = new ArrayList<>();
 
 }
