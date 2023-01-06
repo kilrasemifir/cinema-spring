@@ -4,6 +4,8 @@ import fr.kira.formation.spring.cinema.seances.Seance;
 import fr.kira.formation.spring.cinema.seances.SeanceService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TicketService {
 
@@ -44,5 +46,7 @@ public class TicketService {
     }
 
 
-
+    public List<Ticket> findAllBySeanceId(Integer id) {
+        return repository.findAllBySeanceId(id);
+    }
 }

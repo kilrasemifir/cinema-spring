@@ -1,6 +1,7 @@
 package fr.kira.formation.spring.cinema.seances;
 
 import fr.kira.formation.spring.cinema.exceptions.BadRequestException;
+import fr.kira.formation.spring.cinema.tickets.Ticket;
 import lombok.Getter;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,11 @@ public class SeanceController {
     @DeleteMapping("{id}")
     public void deleteById(@PathVariable Integer id) {
         service.deleteById(id);
+    }
+
+    @GetMapping("{id}/tickets")
+    public List<Ticket> findTickets(@PathVariable Integer id) {
+        return service.findTickets(id);
     }
 
 

@@ -1,8 +1,9 @@
 package fr.kira.formation.spring.cinema.seances;
 
-import fr.kira.formation.spring.cinema.exceptions.BadRequestException;
 import fr.kira.formation.spring.cinema.salles.Salle;
 import fr.kira.formation.spring.cinema.salles.SalleService;
+import fr.kira.formation.spring.cinema.tickets.Ticket;
+import fr.kira.formation.spring.cinema.tickets.TicketService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -15,11 +16,13 @@ public class SeanceService {
 
     private final SeanceRepository repository;
     private final SalleService salleService;
+    private final TicketService ticketService;
 
 
-    public SeanceService(SeanceRepository repository, SalleService salleService) {
+    public SeanceService(SeanceRepository repository, SalleService salleService, TicketService ticketService) {
         this.repository = repository;
         this.salleService = salleService;
+        this.ticketService = ticketService;
     }
 
     public List<Seance> findAll() {
@@ -54,4 +57,7 @@ public class SeanceService {
     }
 
 
+    public List<Ticket> findTickets(Integer id) {
+        return ticketService.findAllBySeanceId(id);
+    }
 }

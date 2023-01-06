@@ -1,14 +1,21 @@
 package fr.kira.formation.spring.cinema.salles;
 
+import fr.kira.formation.spring.cinema.seances.Seance;
+import fr.kira.formation.spring.cinema.seances.SeanceService;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class SalleService {
 
     private final SalleRepository repository;
+    private final SeanceService seanceService;
 
-    public SalleService(SalleRepository repository) {
+    public SalleService(SalleRepository repository, SeanceService seanceService) {
         this.repository = repository;
+        this.seanceService = seanceService;
     }
 
     public Salle save(Salle entity) {
@@ -27,4 +34,13 @@ public class SalleService {
         return repository.findAll();
     }
 
+    public Iterable<Salle> findSallesDisponibles(LocalDateTime date) {
+        List<Seance> seances = seanceService.findByDate(date.toLocalDate());
+        seances = seances.stream().filter(seance -> {
+            LocalDateTime debut = seance.getDate();
+            LocalDateTime fin = seance.getDate().plusMinutes(seance.getFilm().getDuree());
+            return debut.isAfter(date) || fin.isBefore(date);
+        }).toList();
+        return repository.findAllById(seances.stream().map(Seance::getSalle).map(Salle::getId).toList());
+    }
 }

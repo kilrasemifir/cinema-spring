@@ -2,6 +2,8 @@ package fr.kira.formation.spring.cinema.salles;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("salles")
 @CrossOrigin
@@ -31,6 +33,16 @@ public class SalleController {
     @DeleteMapping("{id}")
     public void deleteById(Integer id) {
         service.deleteById(id);
+    }
+
+    /**
+     * <h2>Retourne la liste des salles disponibles a une date et une heure donnees.</h2>
+     *
+     * @param date la date de la séance
+     */
+    @GetMapping("seances/date/{date}")
+    public Iterable<Salle> findSallesDisponibles(@PathVariable LocalDateTime date) {
+        return service.findSallesDisponibles(date);
     }
 
 }
